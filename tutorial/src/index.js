@@ -2,25 +2,22 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
-class Square extends React.Component{
-    constructor(props){
-        super(props);
-        this.state={
-            value:null,
-        };
-    }
+function Square(props){
+/* Componentのconstructorは、state管理のためだけに存在しているようだ。 */
+/* Stateフリーになったコンポーネントを「制御されたコンポーネント」と呼ぶらしい
+    制御されたコンポーネントはクラスよりも関数で定義する方が簡潔に済むらしい */
 
-    render() {
+    
         return(
             <button 
                 className = "square" 
-                onClick={() => this.setState({value:'X'}) }
+                onClick= {props.onClick}
             >
-                {this.state.value}
+                {props.value}
             </button>
         );
     }
-}
+
 
 
 class Board extends React.Component{
@@ -31,9 +28,17 @@ class Board extends React.Component{
         };
     }
 
+    handleClick(i) {
+        const squares = this.state.squares.slice();
+        squares[i] = 'X';
+        this.setState({squares: squares});
+    }
 
     renderSquare(i) {
-        return <Square value={this.state.squares[i]}/>;
+        return (<Square 
+                    value={this.state.squares[i]}
+                    onClick={() => this.handleClick(i)}
+        />);
     }
     
     render() {
